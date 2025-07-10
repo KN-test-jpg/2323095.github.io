@@ -1,5 +1,265 @@
-<html>
-  <body>
-    first github web page.
-  </body>
-<html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>スマートリング製品まとめ</title>
+  <style>
+    /* =====  カスタムテーマ変数 ===== */
+    :root {
+      --primary: #0d6efd;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #212529;
+      --accent: #ff4d4f; /* 強調カラー */
+    }
+    html[data-theme="dark"] {
+      --bg: #212529;
+      --card-bg: #2b3035;
+      --text: #f8f9fa;
+    }
+
+    /* =====  ベーススタイル  ===== */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, "Noto Sans JP", sans-serif;
+      margin: 0;
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 1.4rem 1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+    #theme-toggle {
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* =====  流れる説明文 ===== */
+    .features-marquee {
+      background: var(--card-bg);
+      overflow: hidden;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .features-marquee p {
+      display: inline-block;
+      white-space: nowrap;
+      padding: 0.7rem 0;
+      font-size: 1rem;
+      font-weight: 500;
+      animation: marquee 22s linear infinite;
+    }
+    .features-marquee p:hover {
+      animation-play-state: paused;
+      cursor: pointer;
+    }
+    .features-marquee .em {
+      font-size: 1.15em;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    @keyframes marquee {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .features-marquee p {
+        animation: none;
+        transform: translateX(0);
+      }
+    }
+
+    /* =====  カードグリッド  ===== */
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .ring-grid {
+      display: grid;
+      gap: 1.6rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .ring-card {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transition: transform 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .ring-card:hover {
+      transform: translateY(-4px);
+    }
+    .ring-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: #ddd;
+    }
+    .ring-card-content {
+      padding: 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .ring-card h2 {
+      margin: 0 0 0.3rem;
+      font-size: 1.15rem;
+    }
+    .ring-meta {
+      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+      line-height: 1.4;
+    }
+    .ring-links a {
+      margin-right: 0.8rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .ring-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💍 スマートリング製品まとめ</h1>
+    <button id="theme-toggle" title="テーマ切替">🌙</button>
+  </header>
+
+  <!-- 流れる説明文（スマートリングで何ができるか） -->
+  <section class="features-marquee" aria-label="スマートリング機能紹介">
+    <p>
+      ❤️ <span class="em">心拍数</span>を測れる　　🛌 <span class="em">睡眠の質</span>をチェック　　⚡️ <span class="em">ストレス</span>レベルを把握　　📈 <span class="em">活動量</span>をトラッキング　　🌡️ <span class="em">体温変動</span>をキャッチ　　🔋 最大1週間の<strong>バッテリー</strong>
+    </p>
+  </section>
+
+  <main class="container">
+    <div class="ring-grid" id="ring-grid"></div>
+  </main>
+
+  <script>
+    /* === 製品データ（ここを書き換えるだけで更新） === */
+    const rings = [
+      {
+        name: "Oura Ring Gen3",
+        company: "Oura Health (🇫🇮/🇺🇸)",
+        img:
+          "https://upload.wikimedia.org/wikipedia/commons/c/cd/Oura_ring_generation_3_sensors_visible.png",
+        official: "https://ouraring.com",
+        buy: "https://www.amazon.com/Oura-Ring-Gen3-Horizon-Tracking/dp/B0CSRF4MV3",
+        sub: "$5.99/月",
+        battery: "4〜7日",
+      },
+      {
+        name: "RingConn Gen2",
+        company: "RingConn (🇨🇳)",
+        img:
+          "https://ringconn.com/cdn/shop/files/ringconn_smart_ring.png?v=1714040261",
+        official: "https://ringconn.com",
+        buy: "https://www.amazon.co.jp/dp/B0CWSVD9JR",
+        sub: "なし",
+        battery: "10〜12日",
+      },
+      {
+        name: "Ultrahuman Ring AIR",
+        company: "Ultrahuman (🇮🇳)",
+        img:
+          "https://public-web-assets.uh-static.com/web_v2/illustrations/air-front-tilt.png",
+        official: "https://www.ultrahuman.com/ring",
+        buy: "https://www.amazon.com/ULTRAHUMAN-Ring-AIR-FSA-Approved-Wearable/dp/B0D983R3N3",
+        sub: "なし",
+        battery: "4〜6日",
+      },
+      {
+        name: "Samsung Galaxy Ring",
+        company: "Samsung Electronics (🇰🇷)",
+        img: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Galaxy_Ring.jpg",
+        official: "https://www.samsung.com/us/rings/galaxy-ring/",
+        buy: "https://www.amazon.com",
+        sub: "なし",
+        battery: "最大7日",
+      },
+      {
+        name: "Circular Ring 2",
+        company: "Circular SAS (🇫🇷)",
+        img:
+          "https://cdn.prod.website-files.com/5c9cf810e0682292a9da04b8/67a8f248dccdd3b4b45f04e0_DSC06849.jpg",
+        official: "https://shop.circular.xyz",
+        buy: "https://shop.circular.xyz",
+        sub: "なし*",
+        battery: "1.5〜6日",
+      },
+      {
+        name: "Amazfit Helio Ring",
+        company: "Zepp Health (🇨🇳)",
+        img: "https://us.amazfit.com/cdn/shop/files/galaxyfront.jpg?v=1716349460&width=4764",
+        official: "https://us.amazfit.com/products/amazfit-helio-ring",
+        buy: "https://www.amazon.com/Amazfit-Subscription-Charging-Titanium-Water-Resistance/dp/B0D5LPZHLB",
+        sub: "なし",
+        battery: "約4日",
+      },
+    ];
+
+    /* === DOM生成 === */
+    const grid = document.getElementById("ring-grid");
+    rings.forEach((r) => {
+      const card = document.createElement("div");
+      card.className = "ring-card";
+      card.innerHTML = `
+        <img src="${r.img}" alt="${r.name}">
+        <div class="ring-card-content">
+          <div>
+            <h2>${r.name}</h2>
+            <div class="ring-meta">${r.company}</div>
+            <div class="ring-meta">バッテリー: ${r.battery} ・ 月額: ${r.sub}</div>
+          </div>
+          <div class="ring-links">
+            <a href="${r.official}" target="_blank" rel="noopener">公式</a>
+            <a href="${r.buy}" target="_blank" rel="noopener">購入</a>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    /* === テーマ切替 === */
+    const toggle = document.getElementById("theme-toggle");
+    toggle.addEventListener("click", () => {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      document.documentElement.setAttribute("data-theme", isDark ? "light" : "dark");
+      toggle.textContent = isDark ? "🌙" : "☀️";
+    });
+  </script>
+</body>
+</html>
